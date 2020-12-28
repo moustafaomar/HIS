@@ -1,11 +1,31 @@
 from flask import Flask, jsonify,request,make_response
 import mysql.connector
+import os
 import jwt
 import datetime
 from functools import wraps
 from werkzeug.security import generate_password_hash,check_password_hash
+from werkzeug.utils import secure_filename
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "PATIENTSECRETKEY"
+UPLOAD_FOLDER = '/uploads'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+#Allow only specific filetypes to be uploaded
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def upload_file():
+    if 'file' not in request.files:
+        return False
+        file = request.files['file']
+        if file.filename == '':
+            return False
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return filename
 
 #SQL Connection 
 def SQL_CONN():
@@ -67,3 +87,12 @@ def patient_login():
 @patient_middleware
 def patient_protected_area():
     return jsonify({'message':'Entered'})
+@patient_middleware
+def patient_upload_file(pid,did):
+    file = upload_file()
+    if file:
+        [conn,mydb] = SQL_CONN()
+        query = "INSERT INTO patient_files(PSSN,Filename,FileURL,DSSN) VALUES(%s,%s,%s,%s)"
+        values = (pid,file,"http://localhost:5000/upload/"+file,did)
+        conn.execute(query,values)
+        mydb.commit()

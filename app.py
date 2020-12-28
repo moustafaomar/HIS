@@ -6,8 +6,9 @@ import doctor
 import patient
 from functools import wraps
 from werkzeug.security import generate_password_hash,check_password_hash
+from flask_cors import CORS
 app = Flask(__name__)
-
+CORS(app)
 #create doctor route
 app.add_url_rule('/doctor/register','create_doctor',view_func=doctor.create_doctor,methods=['POST'])
 #create patient route
@@ -20,6 +21,9 @@ app.add_url_rule('/patient/login','login_patient',view_func=patient.patient_logi
 app.add_url_rule('/doctor/dashboard','protected_doctor',view_func=doctor.doctor_protected_area,methods=['GET'])
 #Patient protected route
 app.add_url_rule('/patient/dashboard','protected_patient',view_func=patient.patient_protected_area,methods=['GET'])
+
+#Patient file upload route
+app.add_url_rule('/patient/<int:pid>/<int:did>','upload_patient',view_func=patient.patient_upload_file,methods=['POST'])
 
 if __name__ == '__main__':
    app.run()
