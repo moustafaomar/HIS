@@ -96,3 +96,11 @@ def patient_upload_file(pid,did):
         values = (pid,file,"http://localhost:5000/upload/"+file,did)
         conn.execute(query,values)
         mydb.commit()
+@patient_middleware
+def get_data():
+    token = request.headers['x-access-token']
+    [conn,mydb] = SQL_CONN()
+    query = "SELECT Name FROM patient WHERE SSN = %s"
+    values = (jwt.decode(token,app.config['SECRET_KEY'])['user'],)
+    conn.execute(query,values)
+    return jsonify({'message':conn.fetchone()})

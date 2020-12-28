@@ -25,5 +25,9 @@ app.add_url_rule('/patient/dashboard','protected_patient',view_func=patient.pati
 #Patient file upload route
 app.add_url_rule('/patient/<int:pid>/<int:did>','upload_patient',view_func=patient.patient_upload_file,methods=['POST'])
 
+#Patient data getter route
+app.add_url_rule('/patient/getdata','data_patient',view_func=patient.get_data,methods=['POST'])
+
+
 if __name__ == '__main__':
    app.run()
