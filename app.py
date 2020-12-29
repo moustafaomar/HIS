@@ -28,6 +28,9 @@ app.add_url_rule('/patient/<int:pid>/<int:did>','upload_patient',view_func=patie
 #Patient data getter route
 app.add_url_rule('/patient/getdata','data_patient',view_func=patient.get_data,methods=['POST'])
 
+#Doctor data getter route
+app.add_url_rule('/doctor/getdata','data_doctor',view_func=doctor.get_data,methods=['POST'])
+
 
 if __name__ == '__main__':
    app.run()

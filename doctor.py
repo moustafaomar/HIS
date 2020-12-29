@@ -67,3 +67,11 @@ def doctor_login():
 @doctor_middleware
 def doctor_protected_area():
     return jsonify({'message':'Entered'})
+@doctor_middleware
+def get_data():
+    token = request.headers['x-access-token']
+    [conn,mydb] = SQL_CONN()
+    query = "SELECT Name FROM doctor WHERE SSN = %s"
+    values = (jwt.decode(token,app.config['SECRET_KEY'])['user'],)
+    conn.execute(query,values)
+    return jsonify({'message':conn.fetchone()})
