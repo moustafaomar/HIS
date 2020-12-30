@@ -14,7 +14,7 @@ jobs:
         image: mysql:5.7
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_DATABASE: databaseSubmissions
+          MYSQL_DATABASE: databaseproject
         ports:
             - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=100s --health-timeout=10s --health-retries=5
@@ -29,8 +29,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install mysql-connector-python
           pip install flask
-          
-      - name: Setup Database 
-        run: python setup.py
+          pip install pyjwt
+          pip install flask-cors
+          pip install Werkzeug
       - name: Run tests with python unittest
         run: python -m unittest 
