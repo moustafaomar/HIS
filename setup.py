@@ -56,4 +56,4 @@ ALTER TABLE `patient_files`
   ADD CONSTRAINT `patient_files_ibfk_1` FOREIGN KEY (`PSSN`) REFERENCES `patient` (`SSN`),
   ADD CONSTRAINT `patient_files_ibfk_2` FOREIGN KEY (`DSSN`) REFERENCES `doctor` (`SSN`);
 COMMIT;
-""")
+""", multi=True)
