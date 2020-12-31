@@ -8,52 +8,52 @@ mydb = mysql.connector.connect(
 mycursor = mydb.cursor()
 
 mycursor.execute("""
-CREATE TABLE `admin` (
-  `id` int(11) NOT NULL,
-  `username` varchar(70) NOT NULL,
-  `password` varchar(60) NOT NULL
+CREATE TABLE admin (
+  id int(11) NOT NULL,
+  username varchar(70) NOT NULL,
+  password varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE TABLE `doctor` (
-  `SSN` int(11) NOT NULL,
-  `password` varchar(200) NOT NULL,
-  `Name` varchar(60) NOT NULL,
-  `email` varchar(70) NOT NULL,
-  `phone` varchar(60) NOT NULL,
-  `start_hour` time NOT NULL,
-  `end_hour` time NOT NULL
+CREATE TABLE doctor (
+  SSN int(11) NOT NULL,
+  password varchar(200) NOT NULL,
+  Name varchar(60) NOT NULL,
+  email varchar(70) NOT NULL,
+  phone varchar(60) NOT NULL,
+  start_hour time NOT NULL,
+  end_hour time NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE TABLE `patient` (
-  `SSN` int(11) NOT NULL,
-  `password` varchar(200) NOT NULL,
-  `Name` varchar(70) NOT NULL,
-  `Phone` varchar(50) NOT NULL
+CREATE TABLE patient (
+  SSN int(11) NOT NULL,
+  password varchar(200) NOT NULL,
+  Name varchar(70) NOT NULL,
+  Phone varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE TABLE `patient_doctor` (
-  `PSSN` int(11) NOT NULL,
-  `DSSN` int(11) NOT NULL
+CREATE TABLE patient_doctor (
+  PSSN int(11) NOT NULL,
+  DSSN int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE TABLE `patient_files` (
-  `PSSN` int(11) NOT NULL,
-  `Filename` varchar(100) NOT NULL,
-  `FileURL` varchar(100) NOT NULL,
-  `DSSN` int(11) NOT NULL
+CREATE TABLE patient_files (
+  PSSN int(11) NOT NULL,
+  Filename varchar(100) NOT NULL,
+  FileURL varchar(100) NOT NULL,
+  DSSN int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-ALTER TABLE `doctor`
-  ADD PRIMARY KEY (`SSN`);
-ALTER TABLE `patient`
-  ADD PRIMARY KEY (`SSN`);
-ALTER TABLE `patient_doctor`
-  ADD PRIMARY KEY (`PSSN`,`DSSN`),
-  ADD KEY `DSSN` (`DSSN`);
-ALTER TABLE `patient_files`
-  ADD PRIMARY KEY (`FileURL`),
-  ADD KEY `PSSN` (`PSSN`),
-  ADD KEY `DSSN` (`DSSN`);
-ALTER TABLE `patient_doctor`
-  ADD CONSTRAINT `patient_doctor_ibfk_1` FOREIGN KEY (`PSSN`) REFERENCES `patient` (`SSN`),
-  ADD CONSTRAINT `patient_doctor_ibfk_2` FOREIGN KEY (`DSSN`) REFERENCES `doctor` (`SSN`);
-ALTER TABLE `patient_files`
-  ADD CONSTRAINT `patient_files_ibfk_1` FOREIGN KEY (`PSSN`) REFERENCES `patient` (`SSN`),
-  ADD CONSTRAINT `patient_files_ibfk_2` FOREIGN KEY (`DSSN`) REFERENCES `doctor` (`SSN`);
+ALTER TABLE doctor
+  ADD PRIMARY KEY (SSN);
+ALTER TABLE patient
+  ADD PRIMARY KEY (SSN);
+ALTER TABLE patient_doctor
+  ADD PRIMARY KEY (PSSN,DSSN),
+  ADD KEY DSSN (DSSN);
+ALTER TABLE patient_files
+  ADD PRIMARY KEY (FileURL),
+  ADD KEY PSSN (PSSN),
+  ADD KEY DSSN (DSSN);
+ALTER TABLE patient_doctor
+  ADD CONSTRAINT patient_doctor_ibfk_1 FOREIGN KEY (PSSN) REFERENCES patient (SSN),
+  ADD CONSTRAINT patient_doctor_ibfk_2 FOREIGN KEY (DSSN) REFERENCES doctor (SSN);
+ALTER TABLE patient_files
+  ADD CONSTRAINT patient_files_ibfk_1 FOREIGN KEY (PSSN) REFERENCES patient (SSN),
+  ADD CONSTRAINT patient_files_ibfk_2 FOREIGN KEY (DSSN) REFERENCES doctor (SSN);
 COMMIT;
 """, multi=True)
