@@ -57,7 +57,7 @@ def doctor_login():
     if(result):
         if check_password_hash(result[0],data['password']):
             token = jwt.encode({'user':data['SSN'],'role':'doctor','exp':datetime.datetime.utcnow() + datetime.timedelta(minutes=120)},app.config['SECRET_KEY'])
-            return jsonify({'token':token.decode('utf-8')})
+            return jsonify({'token':token})
         else:
             return jsonify({
                 'message': "Incorrect Password",
