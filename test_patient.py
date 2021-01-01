@@ -53,6 +53,6 @@ class TestPatientMethods(unittest.TestCase):
         with tester.test_request_context(
         '/patient/dashboard', headers={'x-access-token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMTA1MDAiLCJyb2xlIjoicGF0aWVudCIsImV4cCI6MzA3NjgwMDAwMH0.xFQSEuuNVJKA0U3ZRw-r6YDtl-bNduIwewu3RTztTtw'}):
             response = patient.get_data()
-            response = response.response[0].decode('utf-8')
+            #response = response.response[0].decode('utf-8')
             expected = '{"message":["TestPatient"]}\n'
             self.assertEqual(response,expected)
