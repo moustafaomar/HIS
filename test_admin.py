@@ -18,13 +18,13 @@ class TestAdminMethods(unittest.TestCase):
     #true test for login
     def test_admin_login(self):
         tester = app
+        self.test_create_admin()
         with tester.test_request_context(
         '/admin/login', json={'username': 'test', 'password' : 'test_password'}):
             expected = 'token'
             response = admin.admin_login()
             response = response.response[0].decode('utf-8')
-            self.assertTrue(response)
-            #self.assertIn(expected,response)
+            self.assertIn(expected,response)
     #incorrect login, username doesn't exist
     def test_admin_data_with_username_that_doesnt_exist(self):
         tester = app
@@ -37,6 +37,7 @@ class TestAdminMethods(unittest.TestCase):
     #incorrect login
     def test_admin_data_with_incorrect_password(self):
         tester = app
+        self.test_create_admin()
         with tester.test_request_context(
         '/admin/login', json={'username': 'test', 'password' : 'atest_password'}):
             expected = '{"message":"Incorrect Password"}\n'
@@ -54,6 +55,7 @@ class TestAdminMethods(unittest.TestCase):
             self.assertEqual(response,expected)
     def test_admin_data_with_token(self):
         tester = app
+        self.test_create_admin()
         [conn,mydb] = admin.SQL_CONN()
         query = "SELECT id FROM admin WHERE username = %s"
         values = ('test',)
@@ -64,5 +66,4 @@ class TestAdminMethods(unittest.TestCase):
             response = admin.get_data()
             response = response.response[0].decode('utf-8')
             expected = '{"message":["test"]}\n'
-            #self.assertEqual(response,expected)
-            self.assertTrue(response)
+            self.assertEqual(response,expected)
