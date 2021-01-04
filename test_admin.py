@@ -58,7 +58,7 @@ class TestAdminMethods(unittest.TestCase):
         values = ('test',)
         conn.execute(query,values)
         id = conn.fetchone()
-        self.assertFalse(id)
+        self.assertTrue(id)
         #with tester.test_request_context(
         # '/admin/dashboard', headers={'x-access-token': jwt.encode({'user':id[0],'role':'admin','exp':datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},"ADMINSECRETKEY")}):
         #    response = admin.get_data()
