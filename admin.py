@@ -46,6 +46,7 @@ def create_admin():
     values = (data['username'],hashed_password)
     conn.execute(query,values)
     mydb.commit()
+    conn.close()
     return jsonify({'message': "Created"})
 #admin Login
 def admin_login():
@@ -56,6 +57,7 @@ def admin_login():
     conn.execute(query,values)
     mydb.commit()
     result=conn.fetchone()
+    conn.close()
     if(result):
         if check_password_hash(result[0],data['password']):
             token = jwt.encode({'user':result[1],'role':'admin','exp':datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},app.config['SECRET_KEY'])
@@ -78,4 +80,5 @@ def get_data():
     conn.execute(query,values)
     mydb.commit()
     data=conn.fetchone()
+    conn.close()
     return jsonify({'message':data})
