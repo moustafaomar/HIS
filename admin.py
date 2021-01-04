@@ -50,7 +50,7 @@ def create_admin():
 def admin_login():
     [conn,mydb] = SQL_CONN()
     data = request.get_json()
-    query="SELECT password,id FROM admin WHERE username = %s LIMIT 1"
+    query="SELECT password,id FROM admin WHERE username = %s"
     values=(data['username'],)
     conn.execute(query,values)
     result=conn.fetchone()
