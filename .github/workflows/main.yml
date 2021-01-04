@@ -35,4 +35,4 @@ jobs:
       - name: Setup Database
         run: python setup.py 
       - name: Run tests with python unittest
-        run: python -m unittest 
+        run: python -m unittest -v
