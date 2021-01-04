@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install mysql-connector-python
+          pip install mysql-connector-python==8.0.16
           pip install flask
           pip install PyJWT==1.4.2
           pip install flask-cors
