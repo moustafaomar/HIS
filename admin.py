@@ -57,7 +57,7 @@ def admin_login():
     values=(data['username'],)
     conn.execute(query,values)
     mydb.commit()
-    result=conn.fetchone()
+    result=conn.fetchall()
     conn.close()
     if(result):
         if check_password_hash(result[0],data['password']):
@@ -80,6 +80,6 @@ def get_data():
     values = (jwt.decode(token,app.config['SECRET_KEY'])['user'],)
     conn.execute(query,values)
     mydb.commit()
-    data=conn.fetchone()
+    data=conn.fetchall()
     conn.close()
     return jsonify({'message':data})
