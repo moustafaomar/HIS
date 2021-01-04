@@ -16,6 +16,7 @@ def SQL_CONN():
     database="databaseproject"
     )
     conn = mydb.cursor(buffered=True)
+    conn.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
     return [conn,mydb]
 
 #Middleware for admin
