@@ -58,10 +58,9 @@ class TestAdminMethods(unittest.TestCase):
         values = ('test',)
         conn.execute(query,values)
         id = conn.fetchone()
-        self.assertTrue(id)
-        #with tester.test_request_context(
-        # '/admin/dashboard', headers={'x-access-token': jwt.encode({'user':id[0],'role':'admin','exp':datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},"ADMINSECRETKEY")}):
-        #    response = admin.get_data()
-        #    response = response.response[0].decode('utf-8')
-        #    expected = '{"message":["test"]}\n'
-        #    self.assertEqual(response,expected)
+        with tester.test_request_context(
+        '/admin/dashboard', headers={'x-access-token': jwt.encode({'user':id[0],'role':'admin','exp':datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},"ADMINSECRETKEY")}):
+            response = admin.get_data()
+            response = response.response[0].decode('utf-8')
+            expected = '{"message":["test"]}\n'
+            self.assertEqual(response,expected)
