@@ -19,7 +19,7 @@ class TestAdminMethods(unittest.TestCase):
         [conn,db] = admin.SQL_CONN()
         sql = "SELECT * FROM admin WHERE id=1"
         conn.execute(sql)
-        data = conn.fetchone()
+        data = conn.fetchall()
         print(data)
         self.assertTrue(data)
     #true test for login
