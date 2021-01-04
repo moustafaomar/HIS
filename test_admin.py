@@ -57,6 +57,7 @@ class TestAdminMethods(unittest.TestCase):
         query = "SELECT id FROM admin WHERE username = %s"
         values = ('test',)
         conn.execute(query,values)
+        mydb.commit()
         id = conn.fetchone()
         with tester.test_request_context(
         '/admin/dashboard', headers={'x-access-token': jwt.encode({'user':id[0],'role':'admin','exp':datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},"ADMINSECRETKEY")}):
