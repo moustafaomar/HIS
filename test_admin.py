@@ -18,7 +18,6 @@ class TestAdminMethods(unittest.TestCase):
     #true test for login
     def test_admin_login(self):
         tester = app
-        self.test_create_admin()
         with tester.test_request_context(
         '/admin/login', json={'username': 'test', 'password' : 'test_password'}):
             expected = 'token'
@@ -37,7 +36,6 @@ class TestAdminMethods(unittest.TestCase):
     #incorrect login
     def test_admin_data_with_incorrect_password(self):
         tester = app
-        self.test_create_admin()
         with tester.test_request_context(
         '/admin/login', json={'username': 'test', 'password' : 'atest_password'}):
             expected = '{"message":"Incorrect Password"}\n'
@@ -55,7 +53,6 @@ class TestAdminMethods(unittest.TestCase):
             self.assertEqual(response,expected)
     def test_admin_data_with_token(self):
         tester = app
-        self.test_create_admin()
         [conn,mydb] = admin.SQL_CONN()
         query = "SELECT id FROM admin WHERE username = %s"
         values = ('test',)
