@@ -15,6 +15,13 @@ class TestAdminMethods(unittest.TestCase):
         with tester.test_request_context(
         '/admin/register', json={'username': 'test', 'password' : 'test_password'}):
             self.assertTrue(admin.create_admin())
+    def test_additional(self):
+        [conn,db] = admin.SQL_CONN()
+        sql = "SELECT * FROM admin WHERE id=1"
+        conn.execute(sql)
+        data = conn.fetchone()
+        print(data)
+        self.assertTrue(data)
     #true test for login
     def test_admin_login(self):
         tester = app
