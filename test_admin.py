@@ -13,7 +13,7 @@ class TestAdminMethods(unittest.TestCase):
     def test_create_admin(self):
         tester = app
         with tester.test_request_context(
-        '/admin/signup', json={'username': 'admin', 'password' : 'test_password'}):
+        '/admin/register', json={'username': 'admin', 'password' : 'test_password'}):
             self.assertTrue(admin.create_admin())
     #true test for login
     def test_admin_login(self):
