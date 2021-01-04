@@ -40,7 +40,6 @@ def admin_middleware(f):
 #Create a new admin
 def create_admin():
     [conn,mydb] = SQL_CONN()
-    conn.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
     data = request.get_json()
     hashed_password = generate_password_hash(data['password'],method='sha256')
     query = "INSERT INTO admin(username,password) VALUES(%s,%s)"
@@ -52,7 +51,6 @@ def create_admin():
 #admin Login
 def admin_login():
     [conn,mydb] = SQL_CONN()
-    conn.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
     data = request.get_json()
     query="SELECT password,id FROM admin WHERE username = %s"
     values=(data['username'],)
@@ -77,7 +75,6 @@ def admin_protected_area():
 def get_data():
     token = request.headers['x-access-token']
     [conn,mydb] = SQL_CONN()
-    conn.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
     query = "SELECT username FROM admin WHERE id = %s"
     values = (jwt.decode(token,app.config['SECRET_KEY'])['user'],)
     conn.execute(query,values)
