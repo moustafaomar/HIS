@@ -15,7 +15,7 @@ def SQL_CONN():
     passwd="",
     database="databaseproject"
     )
-    conn = mydb.cursor()
+    conn = mydb.cursor(buffered=True)
     conn.execute("SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED")
     mydb.commit()
     return [conn,mydb]
