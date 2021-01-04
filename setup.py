@@ -7,7 +7,7 @@ mydb = mysql.connector.connect(
 )
 mycursor = mydb.cursor()
 
-mycursor.execute("CREATE TABLE admin (id int(11) NOT NULL,username varchar(70) NOT NULL,password varchar(90) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;")
+mycursor.execute("CREATE TABLE admin (id int(11) NOT NULL,username varchar(70) NOT NULL,password varchar(200) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;")
 mycursor.execute("CREATE TABLE doctor (SSN int(11) NOT NULL,password varchar(200) NOT NULL,Name varchar(60) NOT NULL, email varchar(70) NOT NULL,phone varchar(60) NOT NULL,start_hour time NOT NULL,end_hour time NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;")
 mycursor.execute("CREATE TABLE patient (SSN int(11) NOT NULL,password varchar(200) NOT NULL,Name varchar(70) NOT NULL,Phone varchar(50) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;")
 mycursor.execute("CREATE TABLE patient_doctor (PSSN int(11) NOT NULL,DSSN int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;")
