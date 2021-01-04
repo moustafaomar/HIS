@@ -4,6 +4,9 @@ from flask.testing import FlaskClient
 from app import app
 from flask import jsonify
 import json
+import datetime
+import jwt
+import mysql.connector
 class TestAdminMethods(unittest.TestCase):
     def test_conn(self):
         self.assertTrue(admin.SQL_CONN())
@@ -50,8 +53,13 @@ class TestAdminMethods(unittest.TestCase):
             self.assertEqual(response,expected)
     def test_admin_data_with_token(self):
         tester = app
+        [conn,mydb] = admin.SQL_CONN()
+        query = "SELECT id FROM admin WHERE username = %s"
+        values = ('admin',)
+        conn.execute(query,values)
+        id = conn.fetchone()
         with tester.test_request_context(
-        '/admin/dashboard', headers={'x-access-token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsInJvbGUiOiJhZG1pbiIsImV4cCI6MzA3NjgwMDAwMH0.DMZ7mGKqHwuWCgILx9w7M0OAxrsx6B3DbpVl_w5oEAc'}):
+        '/admin/dashboard', headers={'x-access-token': jwt.encode({'user':id[0],'role':'admin','exp':datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},"ADMINSECRETKEY")}):
             response = admin.get_data()
             response = response.response[0].decode('utf-8')
             expected = '{"message":["admin"]}\n'
