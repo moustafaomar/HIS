@@ -15,15 +15,6 @@ class TestAdminMethods(unittest.TestCase):
         with tester.test_request_context(
         '/admin/register', json={'username': 'test', 'password' : 'test_password'}):
             self.assertTrue(admin.create_admin())
-    #true test for login
-    def test_admin_login(self):
-        tester = app
-        with tester.test_request_context(
-        '/admin/login', json={'username': 'test', 'password' : 'test_password'}):
-            expected = 'token'
-            response = admin.admin_login()
-            response = response.response[0].decode('utf-8')
-            self.assertIn(expected,response)
     #incorrect login, username doesn't exist
     def test_admin_data_with_username_that_doesnt_exist(self):
         tester = app
@@ -33,16 +24,6 @@ class TestAdminMethods(unittest.TestCase):
             response = admin.admin_login()
             response = response.response[0].decode('utf-8')
             self.assertEqual(response,expected)
-    #incorrect login
-    def test_admin_data_with_incorrect_password(self):
-        tester = app
-        with tester.test_request_context(
-        '/admin/login', json={'username': 'test', 'password' : 'atest_password'}):
-            expected = '{"message":"Incorrect Password"}\n'
-            response = admin.admin_login()
-            response = response.response[0].decode('utf-8')
-            self.assertEqual(response,expected)
-            
     def test_admin_data_without_token(self):
         tester = app
         with tester.test_request_context(
@@ -50,18 +31,4 @@ class TestAdminMethods(unittest.TestCase):
             response = admin.get_data()[0]
             response = response.response[0].decode('utf-8')
             expected = '{"message":"token is missing"}\n'
-            self.assertEqual(response,expected)
-    def test_admin_data_with_token(self):
-        tester = app
-        [conn,mydb] = admin.SQL_CONN()
-        query = "SELECT id FROM admin WHERE username = %s"
-        values = ('test',)
-        conn.execute(query,values)
-        mydb.commit()
-        id = conn.fetchone()
-        with tester.test_request_context(
-        '/admin/dashboard', headers={'x-access-token': jwt.encode({'user':id[0],'role':'admin','exp':datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},"ADMINSECRETKEY")}):
-            response = admin.get_data()
-            response = response.response[0].decode('utf-8')
-            expected = '{"message":["test"]}\n'
             self.assertEqual(response,expected)
