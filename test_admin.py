@@ -23,7 +23,7 @@ class TestAdminMethods(unittest.TestCase):
         database="databaseproject"
         )
         conn = mydb.cursor(buffered=True)
-        conn.execute(sql)
+        conn.execute("SELECT * FROM admin")
         data = conn.fetchone()
         print(conn._rows)
         self.assertTrue(data)
