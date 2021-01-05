@@ -16,8 +16,13 @@ class TestAdminMethods(unittest.TestCase):
         '/admin/register', json={'username': 'test', 'password' : 'test_password'}):
             self.assertTrue(admin.create_admin())
     def test_additional(self):
-        [conn,db] = admin.SQL_CONN()
-        sql = "SELECT * FROM admin"
+        mydb = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        passwd="",
+        database="databaseproject"
+        )
+        conn = mydb.cursor(buffered=True)
         conn.execute(sql)
         data = conn.fetchone()
         print(conn._rows)
