@@ -17,7 +17,7 @@ class TestAdminMethods(unittest.TestCase):
             self.assertTrue(admin.create_admin())
     def test_additional(self):
         [conn,db] = admin.SQL_CONN()
-        sql = "SELECT * FROM admin WHERE id=1"
+        sql = "SELECT * FROM admin"
         conn.execute(sql)
         data = conn.fetchall()
         print(data)
