@@ -14,9 +14,8 @@ def SQL_CONN():
     user="root",
     passwd="",
     database="databaseproject"
-    ,autocommit=True)
+    )
     conn = mydb.cursor(buffered=True)
-    mydb.commit()
     return [conn,mydb]
 
 #Middleware for admin
@@ -54,7 +53,6 @@ def admin_login():
     query="SELECT password,id FROM admin WHERE username = %s"
     values=(data['username'],)
     conn.execute(query,values)
-    mydb.commit()
     result=conn.fetchone()
     if(result):
         if check_password_hash(result[0],data['password']):
@@ -76,6 +74,4 @@ def get_data():
     query = "SELECT username FROM admin WHERE id = %s"
     values = (jwt.decode(token,app.config['SECRET_KEY'])['user'],)
     conn.execute(query,values)
-    mydb.commit()
-    data=conn.fetchone()
-    return jsonify({'message':data})
+    return jsonify({'message':conn.fetchone()})
