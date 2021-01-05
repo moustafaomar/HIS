@@ -17,10 +17,10 @@ class TestAdminMethods(unittest.TestCase):
             self.assertTrue(admin.create_admin())
     def test_additional(self):
         [conn,db] = admin.SQL_CONN()
-        sql = "SELECT * FROM patient"
+        sql = "SELECT * FROM admin"
         conn.execute(sql)
-        data = conn.fetchall()
-        print(data)
+        data = conn.fetchone()
+        print(conn)
         self.assertTrue(data)
     #true test for login
     def test_admin_login(self):
