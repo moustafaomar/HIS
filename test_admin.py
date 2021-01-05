@@ -17,10 +17,10 @@ class TestAdminMethods(unittest.TestCase):
             self.assertTrue(admin.create_admin())
     def test_additional(self):
         [conn,db] = admin.SQL_CONN()
-        sql = "SELECT * FROM admin"
+        sql = "INSERT INTO admin (username,password) VALUES ('test','test_password')"
         conn.execute(sql)
         data = conn.fetchone()
-        print(conn)
+        print(db)
         self.assertTrue(data)
     #true test for login
     def test_admin_login(self):
