@@ -14,7 +14,7 @@ def SQL_CONN():
     user="root",
     passwd="",
     database="databaseproject"
-    )
+    ,autocommit=True)
     conn = mydb.cursor(buffered=True)
     mydb.commit()
     return [conn,mydb]
