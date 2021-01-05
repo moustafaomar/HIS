@@ -18,5 +18,6 @@ mycursor.execute("ALTER TABLE patient_doctor ADD PRIMARY KEY (PSSN,DSSN), ADD KE
 mycursor.execute("ALTER TABLE patient_files ADD PRIMARY KEY (FileURL), ADD KEY PSSN (PSSN), ADD KEY DSSN (DSSN);")
 mycursor.execute("ALTER TABLE patient_doctor ADD CONSTRAINT patient_doctor_ibfk_1 FOREIGN KEY (PSSN) REFERENCES patient (SSN), ADD CONSTRAINT patient_doctor_ibfk_2 FOREIGN KEY (DSSN) REFERENCES doctor (SSN);")
 mycursor.execute("ALTER TABLE patient_files ADD CONSTRAINT patient_files_ibfk_1 FOREIGN KEY (PSSN) REFERENCES patient (SSN),ADD CONSTRAINT patient_files_ibfk_2 FOREIGN KEY (DSSN) REFERENCES doctor (SSN);")
-mycursor.execute("ALTER TABLE admin ADD PRIMARY KEY (id), ADD UNIQUE KEY username (username)")
+mycursor.execute("ALTER TABLE admin ADD PRIMARY KEY (id)")
+mycursor.execute("ALTER TABLE admin ADD UNIQUE KEY username (username)")
 mycursor.execute("ALTER TABLE admin MODIFY id int(11) NOT NULL AUTO_INCREMENT")
