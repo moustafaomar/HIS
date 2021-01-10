@@ -108,6 +108,8 @@ def get_data():
     values = (jwt.decode(token,app.config['SECRET_KEY'])['user'],)
     conn.execute(query,values)
     resultc = conn.fetchone()
+    if not resultc:
+        resultc = (0,)
     query = "SELECT Name,SSN FROM doctor join patient_doctor ON DSSN=doctor.SSN WHERE PSSN=%s"
     values = (jwt.decode(token,app.config['SECRET_KEY'])['user'],)
     conn.execute(query,values)
