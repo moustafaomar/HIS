@@ -71,7 +71,16 @@ def doctor_protected_area():
 def get_data():
     token = request.headers['x-access-token']
     [conn,mydb] = SQL_CONN()
-    query = "SELECT Name FROM doctor WHERE SSN = %s"
+    query = "SELECT Name,start_hour,end_hour FROM doctor WHERE SSN = %s"
     values = (jwt.decode(token,app.config['SECRET_KEY'])['user'],)
     conn.execute(query,values)
-    return jsonify({'message':conn.fetchone()})
+    result = conn.fetchone()
+    today = datetime.datetime.today()
+    delta1 = str(result[1])
+    delta1 = delta1.split(':')
+    delta2 = str(result[2])
+    delta2 = delta2.split(':')
+    starttime = today.replace(hour=int(delta1[0]),minute=int(delta1[1]),second=int(delta1[2]),microsecond=0).isoformat()
+    endtime = today.replace(hour=int(delta2[0]),minute=int(delta2[1]),second=int(delta2[2]),microsecond=0).isoformat()
+    result = (result[0],starttime,endtime)
+    return jsonify({'message':result})

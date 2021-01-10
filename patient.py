@@ -103,4 +103,14 @@ def get_data():
     query = "SELECT Name FROM patient WHERE SSN = %s"
     values = (jwt.decode(token,app.config['SECRET_KEY'])['user'],)
     conn.execute(query,values)
-    return jsonify({'message':conn.fetchone()})
+    result1 = conn.fetchone()
+    query = "SELECT COUNT(DSSN) FROM patient JOIN patient_doctor ON PSSN=patient.SSN WHERE SSN = %s GROUP BY SSN"
+    values = (jwt.decode(token,app.config['SECRET_KEY'])['user'],)
+    conn.execute(query,values)
+    resultc = conn.fetchone()
+    query = "SELECT Name,SSN FROM doctor join patient_doctor ON DSSN=doctor.SSN WHERE PSSN=%s"
+    values = (jwt.decode(token,app.config['SECRET_KEY'])['user'],)
+    conn.execute(query,values)
+    result2 = [conn.fetchall()]
+    result = result1+resultc+tuple(result2)
+    return jsonify({'message':result})

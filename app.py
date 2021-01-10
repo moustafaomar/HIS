@@ -11,7 +11,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 #create doctor route
-app.add_url_rule('/doctor/register','create_doctor',view_func=doctor.create_doctor,methods=['POST'])
+app.add_url_rule('/admin/doctor/create','create_doctor',view_func=admin.create_doctor,methods=['POST'])
 #create patient route
 app.add_url_rule('/patient/register','create_patient',view_func=patient.create_patient,methods=['POST'])
 #create admin route
@@ -39,6 +39,12 @@ app.add_url_rule('/doctor/getdata','data_doctor',view_func=doctor.get_data,metho
 
 #Admin data getter route
 app.add_url_rule('/admin/getdata','data_admin',view_func=admin.get_data,methods=['POST'])
+
+#Admin link users route
+app.add_url_rule('/admin/relate','relate_admin',view_func=admin.link_users,methods=['POST'])
+
+#Admin get linked users route
+app.add_url_rule('/admin/get_related','get_related_admin',view_func=admin.get_related_users,methods=['GET'])
 
 
 if __name__ == '__main__':

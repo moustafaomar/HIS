@@ -4,6 +4,7 @@ import jwt
 import datetime
 from functools import wraps
 from werkzeug.security import generate_password_hash,check_password_hash
+import doctor
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "ADMINSECRETKEY"
 
@@ -75,3 +76,22 @@ def get_data():
     values = (jwt.decode(token,app.config['SECRET_KEY'])['user'],)
     conn.execute(query,values)
     return jsonify({'message':conn.fetchone()})
+@admin_middleware
+def link_users():
+    data = request.get_json()
+    [conn,mydb] = SQL_CONN()
+    query = "INSERT INTO patient_doctor(DSSN,PSSN) VALUES (%s,%s)"
+    values = (data['did'],data['pid'])
+    conn.execute(query,values)
+    mydb.commit()
+    return jsonify({'message': 'Relation Created'})
+@admin_middleware
+def get_related_users():
+    [conn,mydb] = SQL_CONN()
+    query = "SELECT patient.Name,doctor.Name FROM patient JOIN patient_doctor ON patient.SSN = PSSN JOIN doctor ON doctor.SSN = DSSN"
+    conn.execute(query)
+    result = conn.fetchall()
+    return jsonify({'message': 'Relation Created', 'data':result})
+@admin_middleware
+def create_doctor():
+    return doctor.create_doctor()
