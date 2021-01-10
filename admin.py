@@ -95,3 +95,18 @@ def get_related_users():
 @admin_middleware
 def create_doctor():
     return doctor.create_doctor()
+@admin_middleware
+def get_stats():
+    [conn,mydb] = SQL_CONN()
+    query = "SELECT COUNT(SSN) FROM patient"
+    conn.execute(query)
+    result = conn.fetchone()
+    if not result:
+        result = (0,)
+    query = "SELECT COUNT(SSN) FROM doctor"
+    conn.execute(query)
+    result2 = conn.fetchone()
+    if not result2:
+        result2 = (0,)
+    final = result+result2
+    return jsonify({"message":final})

@@ -82,5 +82,24 @@ def get_data():
     delta2 = delta2.split(':')
     starttime = today.replace(hour=int(delta1[0]),minute=int(delta1[1]),second=int(delta1[2]),microsecond=0).isoformat()
     endtime = today.replace(hour=int(delta2[0]),minute=int(delta2[1]),second=int(delta2[2]),microsecond=0).isoformat()
-    result = (result[0],starttime,endtime)
+    query = "SELECT COUNT(PSSN) FROM doctor JOIN patient_doctor ON DSSN=doctor.SSN WHERE SSN = %s GROUP BY SSN"
+    values = (jwt.decode(token,app.config['SECRET_KEY'])['user'],)
+    conn.execute(query,values)
+    resultc = conn.fetchone()
+    if not resultc:
+        resultc = (0,)
+    query = "SELECT Name,SSN FROM patient join patient_doctor ON PSSN=patient.SSN WHERE DSSN=%s"
+    values = (jwt.decode(token,app.config['SECRET_KEY'])['user'],)
+    conn.execute(query,values)
+    result2 = [conn.fetchall()]
+    result = (result[0],starttime,endtime)+resultc+tuple(result2)
+    return jsonify({'message':result})
+@doctor_middleware
+def get_files(pid):
+    token = request.headers['x-access-token']
+    [conn,mydb] = SQL_CONN()
+    query = "SELECT FileURL,Filename FROM patient_files JOIN patient ON PSSN=patient.SSN WHERE DSSN = %s AND patient.SSN = %s"
+    values = (jwt.decode(token,app.config['SECRET_KEY'])['user'],pid)
+    conn.execute(query,values)
+    result = tuple([conn.fetchall()])
     return jsonify({'message':result})

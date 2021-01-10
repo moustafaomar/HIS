@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash,check_password_hash
 from werkzeug.utils import secure_filename
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "PATIENTSECRETKEY"
-UPLOAD_FOLDER = '/uploads'
+UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #Allow only specific filetypes to be uploaded
@@ -19,13 +19,14 @@ def allowed_file(filename):
 def upload_file():
     if 'file' not in request.files:
         return False
-        file = request.files['file']
-        if file.filename == '':
-            return False
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return filename
+    file = request.files['file']
+    print(file)
+    if file.filename == '':
+        return False
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save((app.config['UPLOAD_FOLDER']+'/'+ file.filename))
+        return filename
 
 #SQL Connection 
 def SQL_CONN():
@@ -90,12 +91,16 @@ def patient_protected_area():
 @patient_middleware
 def patient_upload_file(pid,did):
     file = upload_file()
+    print(file)
     if file:
+        print(1)
         [conn,mydb] = SQL_CONN()
         query = "INSERT INTO patient_files(PSSN,Filename,FileURL,DSSN) VALUES(%s,%s,%s,%s)"
-        values = (pid,file,"http://localhost:5000/upload/"+file,did)
+        values = (pid,file,"http://localhost:5000/uploads/"+file,did)
         conn.execute(query,values)
         mydb.commit()
+        return jsonify({'message':'success'})
+    return jsonify({'message':'failed'}),500
 @patient_middleware
 def get_data():
     token = request.headers['x-access-token']
