@@ -5,6 +5,7 @@ import datetime
 import doctor
 import patient
 import admin
+from mailjet_rest import Client
 from functools import wraps
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_cors import CORS
@@ -56,5 +57,29 @@ app.add_url_rule('/admin/get_related','get_related_admin',view_func=admin.get_re
 @app.route('/uploads/<path:filename>')
 def files(filename):
   return send_from_directory('uploads/', filename)
+@app.route('/formsubmit',methods=['POST'])
+def formsubmit():
+   data = request.get_json()
+   mailjet = Client(auth=('ce59a2d52188c2a87f4a1f1deb067ed9', '60342a20254bd7c13a937c29791cfad7'), version='v3.1')
+   data = {
+   'Messages': [
+               {
+                     "From": {
+                           "Email": data['email'],
+                           "Name": data['name']
+                     },
+                     "To": [
+                           {
+                                 "Email": "moustafaomar200@gmail.com",
+                                 "Name": "Mostafa"
+                           }
+                     ],
+                     "Subject": "Mail from HIS",
+                     "TextPart": data['content'],
+               }
+         ]
+   }
+   result = mailjet.send.create(data=data)
+   return result.json()
 if __name__ == '__main__':
    app.run()
