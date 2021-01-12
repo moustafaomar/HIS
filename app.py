@@ -65,7 +65,7 @@ def formsubmit():
    'Messages': [
                {
                      "From": {
-                           "Email": data['email'],
+                           "Email": "moustafaomar200@gmail.com",
                            "Name": data['name']
                      },
                      "To": [
@@ -75,7 +75,7 @@ def formsubmit():
                            }
                      ],
                      "Subject": "Mail from HIS",
-                     "TextPart": data['content'],
+                     "TextPart": "Email: "+data['email']+"\n"+"Content: "+data['content'],
                }
          ]
    }
