@@ -92,6 +92,76 @@ def get_related_users():
     conn.execute(query)
     result = conn.fetchall()
     return jsonify({'message': 'Relation Created', 'data':result})
+# patients on admin area
+@admin_middleware
+def get_patients():
+    [conn,mydb] = SQL_CONN()
+    query = "SELECT patient.Name,patient.SSN,patient.phone FROM patient"
+    conn.execute(query)
+    result = conn.fetchall()
+    return jsonify({'message': 'Fetched', 'data':result})
+@admin_middleware
+def delete_patients():
+    data = request.get_json()
+    [conn,mydb] = SQL_CONN()
+    query = "DELETE FROM patient WHERE SSN = %s"
+    values = (data['ssn'],)
+    conn.execute(query,values)
+    mydb.commit()
+    return jsonify({'message': 'Deleted'})
+@admin_middleware
+def get_edit_patient(ssn):
+    data = request.get_json()
+    [conn,mydb] = SQL_CONN()
+    query = "SELECT Name,phone FROM patient WHERE SSN = %s"
+    values = (ssn,)
+    conn.execute(query,values)
+    result = conn.fetchone()
+    return jsonify({'message': 'fetched','data':result})
+@admin_middleware
+def edit_patient():
+    data = request.get_json()
+    [conn,mydb] = SQL_CONN()
+    query = "UPDATE patient SET Name=%s, phone=%s WHERE SSN = %s"
+    values = (data['Name'],data['phone'],data['SSN'])
+    conn.execute(query,values)
+    mydb.commit()
+    return jsonify({'message': 'updated'})
+# doctors on admin area
+@admin_middleware
+def get_doctors():
+    [conn,mydb] = SQL_CONN()
+    query = "SELECT doctor.Name,doctor.SSN,doctor.email,doctor.phone FROM doctor"
+    conn.execute(query)
+    result = conn.fetchall()
+    return jsonify({'message': 'Fetched', 'data':result})
+@admin_middleware
+def delete_doctors():
+    data = request.get_json()
+    [conn,mydb] = SQL_CONN()
+    query = "DELETE FROM doctor WHERE SSN = %s"
+    values = (data['ssn'],)
+    conn.execute(query,values)
+    mydb.commit()
+    return jsonify({'message': 'Deleted'})
+@admin_middleware
+def get_edit_doctor(ssn):
+    data = request.get_json()
+    [conn,mydb] = SQL_CONN()
+    query = "SELECT Name,phone,email FROM doctor WHERE SSN = %s"
+    values = (ssn,)
+    conn.execute(query,values)
+    result = conn.fetchone()
+    return jsonify({'message': 'fetched','data':result})
+@admin_middleware
+def edit_doctor():
+    data = request.get_json()
+    [conn,mydb] = SQL_CONN()
+    query = "UPDATE doctor SET Name=%s, phone=%s, email=%s WHERE SSN = %s"
+    values = (data['Name'],data['phone'],data['email'],data['SSN'])
+    conn.execute(query,values)
+    mydb.commit()
+    return jsonify({'message': 'updated'})
 @admin_middleware
 def create_doctor():
     return doctor.create_doctor()

@@ -13,6 +13,18 @@ app = Flask(__name__)
 CORS(app)
 #create doctor route
 app.add_url_rule('/admin/doctor/create','create_doctor',view_func=admin.create_doctor,methods=['POST'])
+#Get patients route
+app.add_url_rule('/admin/patients','fetch_patients',view_func=admin.get_patients,methods=['GET'])
+#Get doctors route
+app.add_url_rule('/admin/doctors','fetch_doctors',view_func=admin.get_doctors,methods=['GET'])
+
+#Delete patients route
+app.add_url_rule('/admin/deleteP','delete_patients',view_func=admin.delete_patients,methods=['POST'])
+
+#Delete doctors route
+app.add_url_rule('/admin/deleteD','delete_doctors',view_func=admin.delete_doctors,methods=['POST'])
+
+
 #create patient route
 app.add_url_rule('/patient/register','create_patient',view_func=patient.create_patient,methods=['POST'])
 #create admin route
@@ -40,6 +52,20 @@ app.add_url_rule('/doctor/getdata','data_doctor',view_func=doctor.get_data,metho
 
 #Doctor data getter route
 app.add_url_rule('/doctor/getfiles/<int:pid>','data_files_doctor',view_func=doctor.get_files,methods=['POST'])
+
+#Patient data getter for edit route
+app.add_url_rule('/admin/patient/get/<int:ssn>','data_edit_patient',view_func=admin.get_edit_patient,methods=['GET'])
+
+#Patient updater route
+app.add_url_rule('/admin/patient/edit','edit_patient',view_func=admin.edit_patient,methods=['POST'])
+
+#Doctor data getter for edit route
+app.add_url_rule('/admin/doctor/get/<int:ssn>','data_edit_doctor',view_func=admin.get_edit_doctor,methods=['GET'])
+
+#Doctor updater route
+app.add_url_rule('/admin/doctor/edit','edit_doctor',view_func=admin.edit_doctor,methods=['POST'])
+
+
 
 
 #Admin data getter route
