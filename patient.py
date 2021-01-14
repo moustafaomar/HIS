@@ -26,7 +26,7 @@ def upload_file():
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save((app.config['UPLOAD_FOLDER']+'/'+ file.filename))
-        return filename
+        return file.filename
 
 #SQL Connection 
 def SQL_CONN():
