@@ -24,6 +24,27 @@ app.add_url_rule('/admin/deleteP','delete_patients',view_func=admin.delete_patie
 #Delete doctors route
 app.add_url_rule('/admin/deleteD','delete_doctors',view_func=admin.delete_doctors,methods=['POST'])
 
+#Add doctors to room route
+app.add_url_rule('/admin/DtR','room_doctors',view_func=admin.add_to_room,methods=['POST'])
+
+#Get available rooms Doc
+app.add_url_rule('/admin/DtR/get','room_doctors_getter',view_func=admin.get_rooms,methods=['GET'])
+
+#Add patients to room route
+app.add_url_rule('/admin/PtR','room_patients',view_func=admin.add_to_room_p,methods=['POST'])
+
+#Get available rooms Doc
+app.add_url_rule('/admin/PtR/get','room_patients_getter',view_func=admin.get_rooms_p,methods=['GET'])
+
+#Get rooms in use
+app.add_url_rule('/admin/get_rooms','room_get',view_func=admin.get_free_rooms,methods=['GET'])
+
+#Clear rooms in use
+app.add_url_rule('/admin/clear_room','clear_room',view_func=admin.clear_room,methods=['POST'])
+
+#Clear pat_doc relation
+app.add_url_rule('/admin/unrelate','unrelate',view_func=admin.unrelate,methods=['POST'])
+
 
 #create patient route
 app.add_url_rule('/patient/register','create_patient',view_func=patient.create_patient,methods=['POST'])
@@ -49,6 +70,10 @@ app.add_url_rule('/patient/getdata','data_patient',view_func=patient.get_data,me
 
 #Doctor data getter route
 app.add_url_rule('/doctor/getdata','data_doctor',view_func=doctor.get_data,methods=['POST'])
+
+#Doctor data getter route
+app.add_url_rule('/doctor/rooms','doctors_rooms',view_func=doctor.get_rooms,methods=['GET'])
+
 
 #Doctor data getter route
 app.add_url_rule('/doctor/getfiles/<int:pid>','data_files_doctor',view_func=doctor.get_files,methods=['POST'])

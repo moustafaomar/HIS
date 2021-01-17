@@ -32,6 +32,7 @@ jobs:
           pip install PyJWT==1.4.2
           pip install flask-cors
           pip install Werkzeug
+          pip install mailjet-rest
       - name: Setup Database
         run: python setup.py 
       - name: Run tests with python unittest

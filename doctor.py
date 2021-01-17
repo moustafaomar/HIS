@@ -103,3 +103,13 @@ def get_files(pid):
     conn.execute(query,values)
     result = tuple([conn.fetchall()])
     return jsonify({'message':result})
+@doctor_middleware
+def get_rooms():
+    token = request.headers['x-access-token']
+    [conn,mydb] = SQL_CONN()
+    data = request.get_json()
+    query="SELECT roomno FROM icu WHERE doctor_ssn=%s"
+    values=(jwt.decode(token,app.config['SECRET_KEY'])['user'],)
+    conn.execute(query,values)
+    result=conn.fetchall()
+    return jsonify({'data':result})

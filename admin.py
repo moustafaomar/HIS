@@ -86,9 +86,18 @@ def link_users():
     mydb.commit()
     return jsonify({'message': 'Relation Created'})
 @admin_middleware
+def unrelate():
+    data = request.get_json()
+    [conn,mydb] = SQL_CONN()
+    query = "DELETE from patient_doctor where PSSN=%s and DSSN=%s"
+    values = (data['pssn'],data['dssn'])
+    conn.execute(query,values)
+    mydb.commit()
+    return jsonify({'message': 'Success'})
+@admin_middleware
 def get_related_users():
     [conn,mydb] = SQL_CONN()
-    query = "SELECT patient.Name,doctor.Name FROM patient JOIN patient_doctor ON patient.SSN = PSSN JOIN doctor ON doctor.SSN = DSSN"
+    query = "SELECT patient.Name,doctor.Name,PSSN,DSSN FROM patient JOIN patient_doctor ON patient.SSN = PSSN JOIN doctor ON doctor.SSN = DSSN"
     conn.execute(query)
     result = conn.fetchall()
     return jsonify({'message': 'Relation Created', 'data':result})
@@ -144,6 +153,52 @@ def delete_doctors():
     conn.execute(query,values)
     mydb.commit()
     return jsonify({'message': 'Deleted'})
+@admin_middleware
+def add_to_room():
+    data = request.get_json()
+    [conn,mydb] = SQL_CONN()
+    query = "UPDATE icu SET doctor_ssn = %s WHERE roomno=%s"
+    values = (data['ssn'],data['roomno'])
+    conn.execute(query,values)
+    mydb.commit()
+    return jsonify({'message': 'success'})
+@admin_middleware
+def get_rooms():
+    [conn,mydb] = SQL_CONN()
+    query = "SELECT roomno FROM icu WHERE doctor_ssn IS NULL"
+    conn.execute(query)
+    return jsonify({'message': 'success','data': conn.fetchall()})
+@admin_middleware
+def get_rooms_p():
+    [conn,mydb] = SQL_CONN()
+    query = "SELECT roomno FROM icu WHERE patient_ssn IS NULL"
+    conn.execute(query)
+    return jsonify({'message': 'success','data': conn.fetchall()})
+@admin_middleware
+def add_to_room_p():
+    data = request.get_json()
+    [conn,mydb] = SQL_CONN()
+    query = "UPDATE icu SET patient_ssn = %s WHERE roomno=%s"
+    values = (data['ssn'],data['roomno'])
+    conn.execute(query,values)
+    mydb.commit()
+    return jsonify({'message': 'success'})
+@admin_middleware
+def get_free_rooms():
+    [conn,mydb] = SQL_CONN()
+    query = "SELECT roomno,patient.Name,doctor.Name FROM icu JOIN patient on patient.SSN=patient_ssn join doctor on doctor.ssn=doctor_ssn"
+    conn.execute(query)
+    mydb.commit()
+    return jsonify({'message': conn.fetchall()})
+@admin_middleware
+def clear_room():
+    data = request.get_json()
+    [conn,mydb] = SQL_CONN()
+    query = "UPDATE icu SET patient_ssn=NULL, doctor_ssn=NULL where roomno=%s"
+    values=(data['roomno'],)
+    conn.execute(query,values)
+    mydb.commit()
+    return jsonify({'message': 'Cleared'})
 @admin_middleware
 def get_edit_doctor(ssn):
     data = request.get_json()
